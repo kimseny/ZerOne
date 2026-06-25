@@ -37,10 +37,3 @@ python client.py
 1. **에코 변형** — 서버가 받은 문장을 대문자로 바꿔 되돌려보내기 (`server.py` 맨 아래 힌트 참고)
 2. 닉네임을 입력받아 `닉네임: 메시지` 형태로 표시하기
 3. (가능하면) 같은 와이파이의 친구 PC와 IP로 연결해 보기
-
-## PPT 다시 만들기 (강사용)
-PPT는 `python-pptx` 로 생성합니다.
-```bash
-pip install python-pptx
-python make_ppt.py
-```
