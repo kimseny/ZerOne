@@ -5,7 +5,7 @@ lock = threading.Lock()
 
 def increment():
     global counter
-    for _ in range(100_000):
+    for _ in range(1000):
         with lock:          # 이 블록은 한 번에 한 스레드만
             v = counter
             #time.sleep(0.00001)
