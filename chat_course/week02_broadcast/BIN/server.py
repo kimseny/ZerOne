@@ -62,13 +62,23 @@ def handle(conn, addr):
     # 이 손님이 보내는 말을 계속 받아서 전원에게 뿌린다
     while True:
         try:
-            data = conn.recv(1024)
-        except OSError:
+            data = conn.recv(1024) #메세지를 컴퓨터언어로 보냄
+        except OSError: #에러뜨면 넘어가
             break
-        if not data:          # 빈 데이터 = 손님이 나갔다
+        if not data:          # 빈 데이터 = 손님이 나갔다 넘어가
             break
-        message = data.decode("utf-8")
-        broadcast(f"{nickname}: {message}", exclude=conn)
+        message = data.decode("utf-8") #사람이 볼 수 있는 언어로 바꿔
+
+        #"/count" 명령어 처리
+        if message.strip() == "/count": #.strip()은 "/count"를 치고 엔터를 누르면 서버에서 줄바꿈으로 인식할 수 있어 공백을 제거하기 위해 쓰임
+            with clients_lock: #락 걸고 클라이언트 목록 세고
+                count = len(clients)
+            try: #"/count" 이거 친 사람한테만 현재 접속자 수 보여줌 사람이 볼 수 있는 언어로 바꿔서 
+                conn.sendall(f"[서버]현재 접속자 수 : {count}명\n".encode("utf-8"))
+            except OSError: #try는 "일단 이거 해봐" 이고, except는 "만약 이거 하다가 에러 터지면, 프로그램 죽지 말고 이렇게 대처해"
+                break
+            continue
+        broadcast(f"{nickname}: {message}", exclude=conn) #계속 채팅
 
     # 퇴장 처리: 목록에서 빼고, 모두에게 알린다
     with clients_lock:
